@@ -1,8 +1,10 @@
 package com.talanlabs.training.application.query;
 
+import com.talanlabs.training.domain.Article;
+
 import java.util.List;
 
 public interface ArticleQueryUsecase {
 
-    List<Object> listAllArticles();
+    List<Article> listAllArticles();
 }

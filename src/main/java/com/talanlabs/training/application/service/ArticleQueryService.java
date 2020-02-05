@@ -1,6 +1,7 @@
 package com.talanlabs.training.application.service;
 
 import com.talanlabs.training.application.query.ArticleQueryUsecase;
+import com.talanlabs.training.domain.Article;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 public class ArticleQueryService implements ArticleQueryUsecase {
 
     @Override
-    public List<Object> listAllArticles() {
+    public List<Article> listAllArticles() {
         return null;
     }
 }

@@ -13,6 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
+import static org.hamcrest.core.Is.is;
+import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,6 +57,8 @@ class ArticleQueryRestControllerTest {
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$.[0].id").value(articles.get(0).getId()))
                 .andExpect(jsonPath("$.[0].title").value(articles.get(0).getTitle()))
-                .andExpect(jsonPath("$.[0].author").value(articles.get(0).getAuthor()));
+                .andExpect(jsonPath("$.[0].author").value(articles.get(0).getAuthor()))
+                .andExpect(jsonPath("$.[0].version").doesNotExist());
     }
+
 }

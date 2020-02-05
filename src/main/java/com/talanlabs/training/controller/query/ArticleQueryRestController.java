@@ -1,10 +1,10 @@
 package com.talanlabs.training.controller.query;
 
 import com.talanlabs.training.application.query.ArticleQueryUsecase;
+import com.talanlabs.training.domain.Article;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -17,7 +17,7 @@ public class ArticleQueryRestController {
     }
 
     @GetMapping("/api/articles")
-    public List<Object> getArticles() {
+    public List<Article> getArticles() {
         return articleQueryUsecase.listAllArticles();
     }
 }

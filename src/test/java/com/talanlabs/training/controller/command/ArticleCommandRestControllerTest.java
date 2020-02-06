@@ -15,6 +15,7 @@ import java.util.Map;
 
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -30,7 +31,7 @@ public class ArticleCommandRestControllerTest {
     private ArticleCommandUseCase articleCommandUseCase;
 
     @Test
-    public void shouldReturnErrorHeaderWithNoData() throws Exception {
+    public void submitArticleShouldReturnErrorHeaderWithNoData() throws Exception {
         //when
         //then
         this.mockMvc.perform(
@@ -44,7 +45,7 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
-    public void shouldReturnErrorsWithInvalidAuthor() throws Exception {
+    public void submitArticleShouldReturnErrorsWithInvalidAuthor() throws Exception {
         // given
         Map<String, String> formData = new HashMap<>();
         formData.put("title", "test");
@@ -63,7 +64,7 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
-    public void shouldReturnHeaderCreatedIfSuccess() throws Exception {
+    public void submitArticleShouldReturnHeaderCreatedIfSuccess() throws Exception {
         // given
         Map<String, String> formData = new HashMap<>();
         formData.put("title", "title test");
@@ -82,5 +83,32 @@ public class ArticleCommandRestControllerTest {
 
         //verify
         verify(articleCommandUseCase).submitArticle(new SubmitArticleCommand("title test", "author test"));
+    }
+
+
+    @Test
+    public void publishArticleWithInvalidDate() throws Exception {
+        //when
+        //then
+        this.mockMvc.perform(
+                put(String.format("/api/articles/%s/publish/%s", 4L, "invalid"))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+
+    @Test
+    public void publishArticleShouldReturnAccepted() throws Exception {
+        //when
+        String dateSent = "2020-10-20";
+        //then
+        this.mockMvc.perform(
+                    put(String.format("/api/articles/%s/publish/%s", 4L, dateSent))
+                        .contentType(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isAccepted())
+                .andExpect(jsonPath("$").doesNotExist());
     }
 }

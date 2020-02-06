@@ -32,11 +32,10 @@ public class ArticleCommandRestController {
 
     @PutMapping("/api/articles/{id}/publish/{date}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    public void submitArticle(@PathVariable Long id, @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date ) {
+    public void publishArticle(@PathVariable Long id, @PathVariable("date") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         PublishArticleCommand publishArticleCommand = new PublishArticleCommand(id, date);
         articleCommandUseCase.publishArticle(publishArticleCommand);
     }
-
 
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

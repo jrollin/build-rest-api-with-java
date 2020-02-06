@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @WebMvcTest(ArticleCommandRestController.class)
+@WithMockUser(roles = {"WRITER"})
 public class ArticleCommandRestControllerTest {
 
     @Autowired
@@ -87,27 +89,41 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
+    public void publishArticleAsJournalistIsForbidden() throws Exception {
+        //when
+        //then
+        this.mockMvc.perform(
+                put(String.format("/api/articles/%s/publish/%s", 4L, "2020-10-20"))
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+    @Test
+    @WithMockUser(roles = "PUBLISHER")
     public void publishArticleWithInvalidDate() throws Exception {
         //when
         //then
         this.mockMvc.perform(
                 put(String.format("/api/articles/%s/publish/%s", 4L, "invalid"))
                         .contentType(MediaType.APPLICATION_JSON)
-                )
+        )
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$").doesNotExist());
     }
 
 
     @Test
+    @WithMockUser(roles = "PUBLISHER")
     public void publishArticleShouldReturnAccepted() throws Exception {
         //when
         String dateSent = "2020-10-20";
         //then
         this.mockMvc.perform(
-                    put(String.format("/api/articles/%s/publish/%s", 4L, dateSent))
+                put(String.format("/api/articles/%s/publish/%s", 4L, dateSent))
                         .contentType(MediaType.APPLICATION_JSON)
-                )
+        )
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$").doesNotExist());
     }

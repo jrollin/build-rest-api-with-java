@@ -11,11 +11,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(VersionRestController.class)
-@TestPropertySource(properties = {"version = 1.4"})
 class VersionRestControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
+
+
 
     @Test
     public void shouldReturnVersion() throws Exception {

@@ -30,13 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .csrf().disable()
+                .httpBasic()
+                .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/api/articles").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/articles").hasRole("WRITER")
                 .antMatchers(HttpMethod.PUT, "/api/articles/**").hasRole("PUBLISHER")
                 .anyRequest().authenticated()
                 .and()
-                .httpBasic();
+                .csrf().disable()
+                .formLogin().disable();
+
     }
 }

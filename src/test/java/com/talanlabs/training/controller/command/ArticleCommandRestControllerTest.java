@@ -19,8 +19,7 @@ import java.util.Map;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
 @WebMvcTest(ArticleCommandRestController.class)
@@ -44,7 +43,7 @@ public class ArticleCommandRestControllerTest {
                 post("/api/articles")
                         .content("{}")
                         .contentType(MediaType.APPLICATION_JSON)
-        )
+                )
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$").doesNotExist());
     }
@@ -60,6 +59,7 @@ public class ArticleCommandRestControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{}"))
                 .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.author").value("Author cannot be empty"))
                 .andExpect(jsonPath("$.title").value("Title cannot be empty"));
     }
@@ -81,6 +81,7 @@ public class ArticleCommandRestControllerTest {
                         .content(dataJson)
         )
                 .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.author").value("Author cannot be empty"));
     }
 
@@ -99,8 +100,9 @@ public class ArticleCommandRestControllerTest {
                 post("/api/articles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dataJson)
-        )
+                )
                 .andExpect(status().isBadRequest())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value("Title cannot be empty"));
     }
 
@@ -171,7 +173,6 @@ public class ArticleCommandRestControllerTest {
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$").doesNotExist());
     }
-
 
 
 }

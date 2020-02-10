@@ -2,6 +2,7 @@ package com.talanlabs.training.controller.query;
 
 import com.talanlabs.training.application.query.ArticleQueryUsecase;
 import com.talanlabs.training.domain.Article;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -28,6 +29,7 @@ class ArticleQueryRestControllerTest {
     private ArticleQueryUsecase articleQueryUsecase;
 
     @Test
+    @DisplayName("Should return empty collection if no articles")
     public void shouldReturnEmptyList() throws Exception {
         //when
         when(articleQueryUsecase.listAllArticles()).thenReturn(Collections.emptyList());
@@ -39,6 +41,7 @@ class ArticleQueryRestControllerTest {
     }
 
     @Test
+    @DisplayName("Should return collection of articles representation")
     public void shouldReturnArticleList() throws Exception {
 
         //when

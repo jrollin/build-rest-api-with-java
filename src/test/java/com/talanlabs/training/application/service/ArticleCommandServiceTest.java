@@ -6,6 +6,7 @@ import com.talanlabs.training.application.service.exception.ArticleNotFoundExcep
 import com.talanlabs.training.domain.Article;
 import com.talanlabs.training.repository.ArticleRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -32,6 +33,7 @@ class ArticleCommandServiceTest {
     }
 
     @Test
+    @DisplayName("Article command is stored as Entity")
     void submitArticleCommandStoreModelAsEntity() {
         // given
         SubmitArticleCommand submitArticleCommand = new SubmitArticleCommand("title", "author");
@@ -44,6 +46,7 @@ class ArticleCommandServiceTest {
 
 
     @Test
+    @DisplayName("Throw an exception when trying to publish an unfound article entity")
     void publishsArticleCommandWithoutNotFoundArticle() {
         // given
         when(articleRepository.findById(99L)).thenThrow(ArticleNotFoundException.class);
@@ -56,6 +59,7 @@ class ArticleCommandServiceTest {
 
 
     @Test
+    @DisplayName("Entity is updated with published date")
     void publishsArticleCommandWithoutExistingArticle() {
         // given
         Article expectedArticle = (new Article(4L, "title", "author", 0, null));

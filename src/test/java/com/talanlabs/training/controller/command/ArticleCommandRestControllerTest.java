@@ -3,11 +3,13 @@ package com.talanlabs.training.controller.command;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.talanlabs.training.application.command.ArticleCommandUseCase;
 import com.talanlabs.training.application.command.SubmitArticleCommand;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -33,6 +35,23 @@ public class ArticleCommandRestControllerTest {
     private ArticleCommandUseCase articleCommandUseCase;
 
     @Test
+    @WithAnonymousUser
+    @DisplayName("Anonymous user cannot submit article")
+    public void anonymousNotAllowedToSubmit() throws Exception {
+        //when
+        //then
+        this.mockMvc.perform(
+                post("/api/articles")
+                        .content("{}")
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
+
+
+    @Test
+    @DisplayName("With no data, should return header status code 400 and errors message for each fiels")
     public void submitArticleShouldReturnErrorHeaderWithNoData() throws Exception {
         //when
         //then
@@ -47,6 +66,7 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
+    @DisplayName("With invalid author field, should return header status code 400 and author error message")
     public void submitArticleShouldReturnErrorsWithInvalidAuthor() throws Exception {
         // given
         Map<String, String> formData = new HashMap<>();
@@ -66,6 +86,27 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
+    @DisplayName("With invalid title field, should return header status code 400 and title error message")
+    public void submitArticleShouldReturnErrorsWithInvalidTitle() throws Exception {
+        // given
+        Map<String, String> formData = new HashMap<>();
+        formData.put("author", "test");
+
+        ObjectMapper mapper = new ObjectMapper();
+        String dataJson = mapper.writeValueAsString(formData);
+        //then
+        this.mockMvc.perform(
+                post("/api/articles")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dataJson)
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.title").value("Title cannot be empty"));
+    }
+
+
+    @Test
+    @DisplayName("With valid data, should return header status code 201 and no response data")
     public void submitArticleShouldReturnHeaderCreatedIfSuccess() throws Exception {
         // given
         Map<String, String> formData = new HashMap<>();
@@ -89,6 +130,7 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
+    @DisplayName("A journalist cannot pusblish article")
     public void publishArticleAsJournalistIsForbidden() throws Exception {
         //when
         //then
@@ -101,6 +143,7 @@ public class ArticleCommandRestControllerTest {
     }
 
     @Test
+    @DisplayName("As a redactor, i cannot publish article without valid date")
     @WithMockUser(roles = "PUBLISHER")
     public void publishArticleWithInvalidDate() throws Exception {
         //when
@@ -115,6 +158,7 @@ public class ArticleCommandRestControllerTest {
 
 
     @Test
+    @DisplayName("As a redactor, i cann publish article with valid date")
     @WithMockUser(roles = "PUBLISHER")
     public void publishArticleShouldReturnAccepted() throws Exception {
         //when
@@ -127,4 +171,7 @@ public class ArticleCommandRestControllerTest {
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$").doesNotExist());
     }
+
+
+
 }

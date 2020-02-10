@@ -1,9 +1,9 @@
 package com.talanlabs.training.controller;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -17,8 +17,8 @@ class VersionRestControllerTest {
     private MockMvc mockMvc;
 
 
-
     @Test
+    @DisplayName("should display version stored in parameters")
     public void shouldReturnVersion() throws Exception {
         this.mockMvc.perform(
                 get("/api/version"))

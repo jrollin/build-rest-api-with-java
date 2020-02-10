@@ -33,6 +33,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .httpBasic()
                 .and()
                 .authorizeRequests()
+                .antMatchers(HttpMethod.GET, "/api/version").permitAll()
                 .antMatchers(HttpMethod.GET, "/api/articles").permitAll()
                 .antMatchers(HttpMethod.POST, "/api/articles").hasRole("WRITER")
                 .antMatchers(HttpMethod.PUT, "/api/articles/**").hasRole("PUBLISHER")

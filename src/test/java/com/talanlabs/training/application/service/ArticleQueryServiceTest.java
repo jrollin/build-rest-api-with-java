@@ -3,6 +3,7 @@ package com.talanlabs.training.application.service;
 import com.talanlabs.training.domain.Article;
 import com.talanlabs.training.repository.ArticleRepository;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -29,6 +30,7 @@ class ArticleQueryServiceTest {
     }
 
     @Test
+    @DisplayName("should return empty collection if no articles")
     void listAllArticlesWithNoDataInRepository() {
         // given
         // when
@@ -38,6 +40,7 @@ class ArticleQueryServiceTest {
     }
 
     @Test
+    @DisplayName("should return collection of articles")
     void listAllArticlesWithArticlesInRepository() {
         // given
         List<Article> articlesEnities = Arrays.asList(

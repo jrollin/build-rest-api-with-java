@@ -2,10 +2,12 @@ package com.talanlabs.training.controller.query;
 
 import com.talanlabs.training.application.query.ArticleQueryUsecase;
 import com.talanlabs.training.domain.Article;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Arrays;
@@ -13,12 +15,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.collection.IsCollectionWithSize.hasSize;
-import static org.hamcrest.core.Is.is;
-import static org.mockito.ArgumentMatchers.isA;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ArticleQueryRestController.class)
 class ArticleQueryRestControllerTest {
@@ -30,6 +29,7 @@ class ArticleQueryRestControllerTest {
     private ArticleQueryUsecase articleQueryUsecase;
 
     @Test
+    @DisplayName("Should return empty collection if no articles")
     public void shouldReturnEmptyList() throws Exception {
         //when
         when(articleQueryUsecase.listAllArticles()).thenReturn(Collections.emptyList());
@@ -37,10 +37,12 @@ class ArticleQueryRestControllerTest {
         this.mockMvc.perform(
                 get("/api/articles"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(0)));
     }
 
     @Test
+    @DisplayName("Should return collection of articles representation")
     public void shouldReturnArticleList() throws Exception {
 
         //when
@@ -54,6 +56,7 @@ class ArticleQueryRestControllerTest {
         this.mockMvc.perform(
                 get("/api/articles"))
                 .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$", hasSize(3)))
                 .andExpect(jsonPath("$.[0].id").value(articles.get(0).getId()))
                 .andExpect(jsonPath("$.[0].title").value(articles.get(0).getTitle()))

@@ -2,13 +2,11 @@ package com.talanlabs.training.application.command;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @EqualsAndHashCode
 @Getter
-@RequiredArgsConstructor
 public class SubmitArticleCommand {
 
     @NotBlank(message = "Title cannot be empty")

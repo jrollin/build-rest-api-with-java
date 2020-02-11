@@ -1,5 +1,6 @@
 package com.talanlabs.training.controller;
 
+import com.talanlabs.training.controller.exception.ValidationFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,6 +26,16 @@ public class ExceptionController {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ValidationFailedException.class)
+    public Map<String, String> handleValidationFailedExceptions(ValidationFailedException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getViolations().forEach((error) -> {
+            errors.put(error.getPropertyPath().toString(), error.getMessage());
         });
         return errors;
     }

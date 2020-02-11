@@ -1,7 +1,6 @@
 package com.talanlabs.training.application.presentation;
 
 import com.talanlabs.training.domain.Article;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

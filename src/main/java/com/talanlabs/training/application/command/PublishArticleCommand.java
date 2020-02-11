@@ -1,7 +1,6 @@
 package com.talanlabs.training.application.command;
 
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.time.LocalDate;

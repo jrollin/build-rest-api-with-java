@@ -1,32 +1,27 @@
-package com.talanlabs.training.bdd;
+package com.talanlabs.training.bdd.steps;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.talanlabs.training.TrainingApplication;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.Map;
 
-@SpringBootTest(classes = TrainingApplication.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration
-@DirtiesContext
 public abstract class AbstractStepTest {
+
+    protected ResponseEntity<String> response = null;
 
     @Autowired(required = false)
     private TestRestTemplate restTemplate;
 
     protected ObjectMapper mapper = new ObjectMapper();
 
-    protected  final String host = "localhost";
+    protected final String host = "localhost";
 
     @LocalServerPort
     protected int port;

@@ -6,7 +6,7 @@ import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/resources/features", plugin = {
-        "html:target/cucumber-report"}, monochrome = true)
+        "html:target/cucumber-report"}, monochrome = true, glue = {"com.talanlabs.training.bdd.steps"})
 public class CucumberRunnerTest {
 
 }

@@ -4,12 +4,14 @@ import com.talanlabs.training.application.command.ArticleCommandUseCase;
 import com.talanlabs.training.application.command.PublishArticleCommand;
 import com.talanlabs.training.application.command.SubmitArticleCommand;
 import com.talanlabs.training.controller.exception.ValidationFailedException;
-import com.talanlabs.training.domain.Article;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.*;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Map;
@@ -28,7 +30,7 @@ public class ArticleCommandRestController {
 
     @PostMapping("/api/articles")
     @ResponseStatus(HttpStatus.CREATED)
-    public void submitArticle(@Valid @RequestBody Map<String,String> data) {
+    public void submitArticle(@RequestBody Map<String, String> data) {
 
         SubmitArticleCommand submitArticleCommand = new SubmitArticleCommand(data.get("title"), data.get("author"));
 

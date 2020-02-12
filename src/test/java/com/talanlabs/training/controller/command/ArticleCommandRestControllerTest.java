@@ -43,7 +43,7 @@ public class ArticleCommandRestControllerTest {
                 post("/api/articles")
                         .content("{}")
                         .contentType(MediaType.APPLICATION_JSON)
-                )
+        )
                 .andExpect(status().isUnauthorized())
                 .andExpect(jsonPath("$").doesNotExist());
     }
@@ -100,7 +100,7 @@ public class ArticleCommandRestControllerTest {
                 post("/api/articles")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(dataJson)
-                )
+        )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.title").value("Title cannot be empty"));

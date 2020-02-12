@@ -3,12 +3,17 @@ package com.talanlabs.training.controller.command;
 import com.talanlabs.training.application.command.ArticleCommandUseCase;
 import com.talanlabs.training.application.command.PublishArticleCommand;
 import com.talanlabs.training.application.command.SubmitArticleCommand;
+import com.talanlabs.training.controller.exception.ValidationFailedException;
+import com.talanlabs.training.domain.Article;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.validation.*;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 @RequestMapping(produces = {"application/json;charset=utf-8"})
@@ -23,7 +28,18 @@ public class ArticleCommandRestController {
 
     @PostMapping("/api/articles")
     @ResponseStatus(HttpStatus.CREATED)
-    public void submitArticle(@Valid @RequestBody SubmitArticleCommand submitArticleCommand) {
+    public void submitArticle(@Valid @RequestBody Map<String,String> data) {
+
+        SubmitArticleCommand submitArticleCommand = new SubmitArticleCommand(data.get("title"), data.get("author"));
+
+        ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+        Validator validator = factory.getValidator();
+
+        Set<ConstraintViolation<SubmitArticleCommand>> constraintViolations = validator.validate(submitArticleCommand);
+        if (!constraintViolations.isEmpty()) {
+            throw new ValidationFailedException(new HashSet<ConstraintViolation<?>>(constraintViolations));
+        }
+
         articleCommandUseCase.submitArticle(submitArticleCommand);
     }
 

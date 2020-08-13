@@ -28,7 +28,7 @@ public class ArticleCommandRestController {
 
     @PostMapping("/api/articles")
     @ResponseStatus(HttpStatus.CREATED)
-    public void submitArticle(@Valid @RequestBody Map<String,String> data) {
+    public void submitArticle(@RequestBody Map<String,String> data) {
 
         SubmitArticleCommand submitArticleCommand = new SubmitArticleCommand(data.get("title"), data.get("author"));
 
